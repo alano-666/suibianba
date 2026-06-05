@@ -236,6 +236,39 @@ body {
   font-variant-numeric: tabular-nums;
   transition: all 0.08s ease-out;
 }
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 20px;
+}
+.range-label {
+  font-size: 13px;
+  color: #8BB8C8;
+  white-space: nowrap;
+}
+.range-input {
+  width: 72px;
+  padding: 8px 10px;
+  border: 1.5px solid var(--blue-200);
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: var(--font-stack);
+  text-align: center;
+  color: #3A5068;
+  background: var(--white-60);
+  transition: border-color var(--transition-fast);
+  -webkit-appearance: none;
+}
+.range-input:focus {
+  outline: none;
+  border-color: var(--blue-400);
+  box-shadow: 0 0 0 3px rgba(126,200,227,0.15);
+}
+/* Hide number input spinners */
+.range-input::-webkit-inner-spin-button,
+.range-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.range-input[type=number] { -moz-appearance: textfield; }
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
@@ -310,6 +343,33 @@ body {
 }
 
 /* ========== Color Tab ========== */
+.scene-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.scene-chip {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1.5px solid var(--blue-200);
+  background: var(--white-60);
+  color: var(--blue-600);
+  cursor: pointer;
+  font-family: var(--font-stack);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.scene-chip.active {
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-500));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: var(--shadow-btn);
+  font-weight: 600;
+}
 .color-display {
   width: 160px;
   height: 160px;
@@ -447,6 +507,11 @@ body {
 }
 .result-display.rolling-result {
   animation: flashResult 0.6s ease-out;
+}
+.re-roll-row {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
 }
 @keyframes flashResult {
   0% { transform: scale(1.05); background: var(--blue-300); }
@@ -640,6 +705,12 @@ body {
       <div class="number-display" id="numberDisplay">
         <span class="number" id="randomNumber">42</span>
       </div>
+      <div class="range-row">
+        <span class="range-label">从</span>
+        <input class="range-input" type="number" id="numMin" value="1" min="0" max="9999" onchange="clampRange()">
+        <span class="range-label">到</span>
+        <input class="range-input" type="number" id="numMax" value="100" min="1" max="10000" onchange="clampRange()">
+      </div>
       <button class="btn" id="rollBtn" onclick="rollNumber()">🎲 摇一个数字</button>
       <div class="history">
         <div class="history-title">📋 最近记录</div>
@@ -651,6 +722,14 @@ body {
   <!-- Tab 2: Random Color -->
   <section class="tab-content" id="tab-color">
     <div class="card">
+      <div class="scene-filter" id="sceneFilter">
+        <button class="scene-chip active" data-scene="全部">全部</button>
+        <button class="scene-chip" data-scene="通勤">💼 通勤</button>
+        <button class="scene-chip" data-scene="约会">💕 约会</button>
+        <button class="scene-chip" data-scene="运动">⚽ 运动</button>
+        <button class="scene-chip" data-scene="聚会">🥂 聚会</button>
+        <button class="scene-chip" data-scene="日常">🌿 日常</button>
+      </div>
       <div class="color-display" id="colorDisplay" style="background-color: #7EC8E3;"></div>
       <div class="color-info">
         <div class="color-name-cn" id="colorNameCN">淡蓝</div>
@@ -677,17 +756,27 @@ body {
         <button class="preset-btn" onclick="setPreset('activity')">🎮 周末干嘛</button>
         <button class="preset-btn" onclick="setPreset('movie')">🎬 看什么电影</button>
       </div>
-      <button class="btn" onclick="rollCustom()">🎯 开始抽取</button>
+      <button class="btn" id="rollCustomBtn" onclick="rollCustom()">🎯 开始抽取</button>
       <div class="result-display" id="customResult">👆 输入选项后点击抽取</div>
+      <div class="re-roll-row" id="reRollRow" style="display:none;">
+        <button class="btn btn-secondary" onclick="rollExclude()">🔄 排除此项，再抽一次</button>
+      </div>
+      <div class="history" id="pickerHistory" style="display:none;">
+        <div class="history-title">📋 抽取记录</div>
+        <div class="history-list" id="pickerHistoryList"></div>
+      </div>
     </div>
   </section>
 
   <!-- Tab 4: AI Chat -->
   <section class="tab-content" id="tab-chat">
     <div class="card">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:4px;">
+        <button class="preset-btn" onclick="clearChat()" style="font-size:11px;">🗑️ 清空对话</button>
+      </div>
       <div class="chat-container">
         <div class="chat-messages" id="chatMessages">
-          <div class="chat-bubble assistant">
+          <div class="chat-bubble assistant" id="welcomeMsg">
             👋 嗨～我是你的选择困难小助手！<br><br>
             在纠结什么？把你的选项和顾虑都告诉我吧～<br>
             比如：<br>
@@ -839,10 +928,27 @@ function switchTab(tabName) {
 }
 
 // ==================== Tab 1: Random Number ====================
+function getRange() {
+  const min = parseInt(document.getElementById('numMin').value) || 1;
+  const max = parseInt(document.getElementById('numMax').value) || 100;
+  // Ensure min <= max
+  if (min > max) return { min: max, max: min };
+  return { min, max };
+}
+
+function clampRange() {
+  const { min, max } = getRange();
+  document.getElementById('numMin').value = min;
+  document.getElementById('numMax').value = max;
+}
+
 function rollNumber() {
   const display = document.getElementById('numberDisplay');
   const numEl = document.getElementById('randomNumber');
   const rollBtn = document.getElementById('rollBtn');
+
+  const { min, max } = getRange();
+  const range = max - min + 1;
 
   // Disable button briefly
   rollBtn.disabled = true;
@@ -856,12 +962,12 @@ function rollNumber() {
   const totalFrames = 20;
   let frame = 0;
   const rollInterval = setInterval(() => {
-    numEl.textContent = Math.floor(Math.random() * 100) + 1;
+    numEl.textContent = Math.floor(Math.random() * range) + min;
     frame++;
     if (frame >= totalFrames) {
       clearInterval(rollInterval);
       // Final number
-      const finalNumber = Math.floor(Math.random() * 100) + 1;
+      const finalNumber = Math.floor(Math.random() * range) + min;
       numEl.textContent = finalNumber;
 
       // Add to history
@@ -884,21 +990,47 @@ function renderHistory() {
 }
 
 // ==================== Tab 2: Random Color ====================
+let activeScene = '全部';
+
+// Scene filter click handlers
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('sceneFilter').addEventListener('click', function(e) {
+    if (e.target.classList.contains('scene-chip')) {
+      document.querySelectorAll('.scene-chip').forEach(c => c.classList.remove('active'));
+      e.target.classList.add('active');
+      activeScene = e.target.dataset.scene;
+    }
+  });
+});
+
+function getFilteredColors() {
+  if (activeScene === '全部') return colorLibrary;
+  return colorLibrary.filter(c => c.tags.includes(activeScene));
+}
+
 function rollColor() {
   const display = document.getElementById('colorDisplay');
   const btn = document.getElementById('rollColorBtn');
+
+  const pool = getFilteredColors();
+  if (pool.length === 0) {
+    // No colors in this scene — should not happen with our library
+    return;
+  }
 
   // Disable button during animation
   btn.disabled = true;
   btn.style.opacity = '0.6';
 
-  // Pick final color (ensure different from current)
-  let randomIndex;
+  // Pick final color (ensure different from current if pool allows)
   let finalColor;
-  do {
-    randomIndex = Math.floor(Math.random() * colorLibrary.length);
-    finalColor = colorLibrary[randomIndex];
-  } while (finalColor.hex === currentColor.hex && colorLibrary.length > 1);
+  if (pool.length === 1) {
+    finalColor = pool[0];
+  } else {
+    do {
+      finalColor = pool[Math.floor(Math.random() * pool.length)];
+    } while (finalColor.hex === currentColor.hex && pool.length > 1);
+  }
 
   currentColor = finalColor;
 
@@ -908,8 +1040,8 @@ function rollColor() {
   display.classList.add('color-rolling');
 
   const rollInterval = setInterval(() => {
-    // Pick a random intermediate color
-    const tempColor = colorLibrary[Math.floor(Math.random() * colorLibrary.length)];
+    // Pick a random intermediate color from filtered pool
+    const tempColor = pool[Math.floor(Math.random() * pool.length)];
     display.style.backgroundColor = tempColor.hex;
     document.getElementById('colorNameCN').textContent = tempColor.cn;
     document.getElementById('colorNameEN').textContent = tempColor.en;
@@ -950,26 +1082,40 @@ function updateColorDisplay(color) {
 }
 
 // ==================== Tab 3: Custom Picker ====================
+let pickerHistory = [];
+let lastPicked = null;
+let lastOptions = [];
+
+// Reset exclude state when user changes the input
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('optionInput').addEventListener('input', function() {
+    lastPicked = null;
+    lastOptions = [];
+    document.getElementById('reRollRow').style.display = 'none';
+  });
+});
+
 function setPreset(type) {
   const input = document.getElementById('optionInput');
   input.value = presets[type];
+  lastPicked = null;
+  lastOptions = [];
+  document.getElementById('reRollRow').style.display = 'none';
   input.focus();
 }
 
 function parseOptions(raw) {
-  // Split by newline, Chinese comma, English comma, or Chinese/English semicolon
-  // Also split by multiple spaces
   let parts = raw.split(/[\n,，;；]+/);
-  // Further split each part by 2+ spaces
   parts = parts.flatMap(p => p.split(/\s{2,}/));
-  // Trim and filter empty
   return parts.map(p => p.trim()).filter(p => p.length > 0);
 }
 
-function rollCustom() {
+function rollCustom(excludeList) {
   const input = document.getElementById('optionInput');
   const resultEl = document.getElementById('customResult');
+  const btn = document.getElementById('rollCustomBtn');
   const raw = input.value.trim();
+  const exclude = excludeList || [];
 
   if (!raw) {
     resultEl.textContent = '😅 请先输入选项再抽取哦～';
@@ -978,23 +1124,36 @@ function rollCustom() {
     return;
   }
 
-  const options = parseOptions(raw);
+  let options = parseOptions(raw);
+
+  // Apply exclusions
+  const excludeSet = new Set(exclude);
+  options = options.filter(o => !excludeSet.has(o));
 
   if (options.length === 0) {
-    resultEl.textContent = '😅 没有识别到有效选项，请检查一下～';
+    resultEl.textContent = '😅 所有选项都被排除了，没有可选的啦～';
     resultEl.classList.add('rolling-result');
     setTimeout(() => resultEl.classList.remove('rolling-result'), 600);
     return;
   }
 
   if (options.length === 1) {
-    resultEl.textContent = `🤷 只有一个选项：「${options[0]}」，不用纠结啦！`;
+    resultEl.textContent = `✨ 只剩一个：「${options[0]}」，就它了！`;
     resultEl.classList.add('rolling-result');
     setTimeout(() => resultEl.classList.remove('rolling-result'), 600);
+    lastPicked = options[0];
+    lastOptions = options;
+    updatePickerUI();
     return;
   }
 
-  // Rolling animation through options
+  lastOptions = options;
+
+  // Disable button during animation
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+
+  // Rolling animation
   const totalFrames = 25;
   let frame = 0;
   const rollInterval = setInterval(() => {
@@ -1007,8 +1166,49 @@ function rollCustom() {
       resultEl.textContent = '✨ ' + final + ' ✨';
       resultEl.classList.add('rolling-result');
       setTimeout(() => resultEl.classList.remove('rolling-result'), 600);
+
+      lastPicked = final;
+
+      // Add to picker history
+      pickerHistory.unshift(final);
+      if (pickerHistory.length > 10) pickerHistory.pop();
+      renderPickerHistory();
+      updatePickerUI();
+
+      btn.disabled = false;
+      btn.style.opacity = '1';
     }
   }, 40);
+}
+
+function rollExclude() {
+  // Collect all previously picked items in this session
+  const pickedSet = new Set(pickerHistory);
+  rollCustom(Array.from(pickedSet));
+}
+
+function updatePickerUI() {
+  const reRollRow = document.getElementById('reRollRow');
+  const historyDiv = document.getElementById('pickerHistory');
+  const allOptions = parseOptions(document.getElementById('optionInput').value.trim());
+  const unpickedCount = allOptions.filter(o => !pickerHistory.includes(o)).length;
+
+  if (lastPicked && unpickedCount > 0 && allOptions.length > 1) {
+    reRollRow.style.display = 'flex';
+  } else {
+    reRollRow.style.display = 'none';
+  }
+
+  if (pickerHistory.length > 0) {
+    historyDiv.style.display = 'block';
+  }
+}
+
+function renderPickerHistory() {
+  const container = document.getElementById('pickerHistoryList');
+  container.innerHTML = pickerHistory.map(n =>
+    `<span class="history-item">${n}</span>`
+  ).join('');
 }
 
 // ==================== Tab 4: AI Chat (智谱 GLM API) ====================
@@ -1111,6 +1311,20 @@ async function sendMessage() {
   aiBubble.textContent = replyText;
   messages.appendChild(aiBubble);
   messages.scrollTop = messages.scrollHeight;
+}
+
+function clearChat() {
+  const messages = document.getElementById('chatMessages');
+  // Keep only the welcome message
+  messages.innerHTML = `<div class="chat-bubble assistant" id="welcomeMsg">
+    👋 嗨～我是你的选择困难小助手！<br><br>
+    在纠结什么？把你的选项和顾虑都告诉我吧～<br>
+    比如：<br>
+    • 「在两个工作机会之间纠结…」<br>
+    • 「不知道该不该换城市…」<br>
+    • 「今天穿哪件衣服出门…」<br><br>
+    我会帮你分析，给你一些参考建议 💙
+  </div>`;
 }
 
 function sleep(ms) {
