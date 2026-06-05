@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#7EC8E3">
+<title>随便吧 — 把犹豫交给随机，把心情还给治愈</title>
+<style>
+/* ========== CSS Variables ========== */
+:root {
+  --blue-100: #E8F6FA;
+  --blue-200: #C5E9F2;
+  --blue-300: #A3DBEB;
+  --blue-400: #7EC8E3;
+  --blue-500: #5BBDD9;
+  --blue-600: #3DA5C4;
+  --blue-700: #2E8CAA;
+  --white-85: rgba(255,255,255,0.85);
+  --white-60: rgba(255,255,255,0.60);
+  --white-40: rgba(255,255,255,0.40);
+  --shadow-soft: 0 4px 20px rgba(126,200,227,0.15);
+  --shadow-card: 0 8px 32px rgba(126,200,227,0.12);
+  --shadow-btn: 0 4px 14px rgba(126,200,227,0.25);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --font-stack: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --transition-fast: 0.2s cubic-bezier(0.4,0,0.2,1);
+  --transition-smooth: 0.35s cubic-bezier(0.4,0,0.2,1);
+  --transition-bounce: 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ========== Reset & Base ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-stack);
+  color: #3A5068;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(160deg, #E8F6FA 0%, #D4ECF4 15%, #C5E9F2 30%, #D9EFF6 45%, #E0F2F8 60%, #D0EAF3 80%, #E8F6FA 100%);
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== Decorative Background Elements ========== */
+.bg-decoration {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.bg-circle {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(126,200,227,0.2), rgba(126,200,227,0.02));
+}
+.bg-circle-1 { width: 280px; height: 280px; top: -80px; right: -60px; }
+.bg-circle-2 { width: 200px; height: 200px; bottom: 15%; left: -70px; animation: floatSlow 8s ease-in-out infinite; }
+.bg-circle-3 { width: 160px; height: 160px; top: 40%; right: -50px; animation: floatSlow 10s ease-in-out infinite reverse; }
+.bg-circle-4 { width: 120px; height: 120px; top: 25%; left: 10%; animation: floatSlow 7s ease-in-out infinite 1s; }
+
+.bg-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(126,200,227,0.25);
+}
+.bg-dot-1 { top: 12%; left: 20%; animation: twinkle 3s ease-in-out infinite; }
+.bg-dot-2 { top: 28%; right: 15%; animation: twinkle 3s ease-in-out infinite 0.8s; }
+.bg-dot-3 { top: 55%; left: 12%; animation: twinkle 3s ease-in-out infinite 1.6s; }
+.bg-dot-4 { top: 70%; right: 22%; animation: twinkle 3s ease-in-out infinite 2.2s; }
+.bg-dot-5 { top: 18%; left: 60%; animation: twinkle 3s ease-in-out infinite 1.2s; }
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* ========== Main Container ========== */
+.app-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 20px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+}
+
+/* ========== Header ========== */
+.header {
+  text-align: center;
+  padding: 28px 0 20px;
+  width: 100%;
+}
+.header-icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+  display: inline-block;
+  animation: floatSlow 4s ease-in-out infinite;
+}
+.header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2E8CAA;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.header .slogan {
+  font-size: 13px;
+  color: #6BA3B8;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+/* ========== Tab Navigation ========== */
+.tab-nav {
+  display: flex;
+  background: var(--white-85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  padding: 4px;
+  width: 100%;
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 12px;
+  z-index: 10;
+  margin-bottom: 20px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px 4px;
+  border: none;
+  background: transparent;
+  border-radius: 28px;
+  font-size: 13px;
+  font-family: var(--font-stack);
+  color: #6BA3B8;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  min-height: 44px;
+  justify-content: center;
+}
+.tab-btn .tab-emoji { font-size: 18px; line-height: 1; }
+.tab-btn .tab-label { font-size: 11px; line-height: 1; }
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-500));
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+  font-weight: 600;
+}
+
+/* ========== Tab Content ========== */
+.tab-content {
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeSlideIn 0.35s ease-out;
+}
+.tab-content.active { display: flex; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Cards ========== */
+.card {
+  background: var(--white-85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+}
+
+/* ========== Random Number Tab ========== */
+.number-display {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--blue-100) 0%, var(--blue-200) 40%, var(--blue-300) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0 24px;
+  box-shadow: 0 0 0 8px rgba(126,200,227,0.08), 0 0 0 16px rgba(126,200,227,0.04), 0 8px 30px rgba(126,200,227,0.18);
+  transition: transform var(--transition-bounce);
+}
+.number-display.rolling { animation: shake 0.15s ease-in-out 3; }
+.number-display .number {
+  font-size: 64px;
+  font-weight: 700;
+  color: #2E8CAA;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.08s ease-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.btn {
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-500));
+  color: #fff;
+  border: none;
+  padding: 14px 36px;
+  border-radius: 28px;
+  font-size: 16px;
+  font-family: var(--font-stack);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: all var(--transition-fast);
+  min-height: 48px;
+  min-width: 44px;
+  letter-spacing: 1px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(126,200,227,0.2);
+  opacity: 0.9;
+}
+.btn-secondary {
+  background: var(--white-85);
+  color: var(--blue-600);
+  border: 1.5px solid var(--blue-300);
+  box-shadow: none;
+}
+
+.history {
+  width: 100%;
+  margin-top: 24px;
+}
+.history-title {
+  font-size: 12px;
+  color: #8BB8C8;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+}
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.history-item {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--white-60);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blue-700);
+  animation: popIn 0.3s ease-out;
+}
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ========== Color Tab ========== */
+.color-display {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--radius-lg);
+  margin: 16px 0 24px;
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-smooth), transform var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
+}
+.color-display::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 100%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  pointer-events: none;
+}
+.color-display.color-rolling {
+  animation: colorShimmer 0.3s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(126,200,227,0.35), var(--shadow-card);
+}
+@keyframes colorShimmer {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.08); }
+}
+.color-info {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.color-name-cn {
+  font-size: 20px;
+  font-weight: 700;
+  color: #3A5068;
+  margin-bottom: 2px;
+}
+.color-name-en {
+  font-size: 13px;
+  color: #8BB8C8;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.color-hex {
+  font-size: 14px;
+  font-family: "SF Mono", "Consolas", monospace;
+  color: #6BA3B8;
+  background: var(--blue-100);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  letter-spacing: 1px;
+}
+.color-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.color-tag {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: var(--blue-100);
+  color: var(--blue-700);
+  letter-spacing: 0.5px;
+}
+
+/* ========== Custom Picker Tab ========== */
+.option-input {
+  width: 100%;
+  min-height: 100px;
+  border: 1.5px solid var(--blue-200);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  font-size: 15px;
+  font-family: var(--font-stack);
+  color: #3A5068;
+  background: var(--white-60);
+  resize: vertical;
+  transition: border-color var(--transition-fast);
+  line-height: 1.6;
+}
+.option-input:focus {
+  outline: none;
+  border-color: var(--blue-400);
+  box-shadow: 0 0 0 3px rgba(126,200,227,0.15);
+}
+.option-input::placeholder { color: #B0CFD9; }
+.input-hint {
+  font-size: 11px;
+  color: #A0C4D0;
+  margin-top: 8px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.preset-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.preset-btn {
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--blue-200);
+  background: var(--white-60);
+  color: var(--blue-600);
+  cursor: pointer;
+  font-family: var(--font-stack);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.preset-btn:active { background: var(--blue-100); border-color: var(--blue-400); }
+
+.result-display {
+  width: 100%;
+  min-height: 56px;
+  background: linear-gradient(135deg, var(--blue-100), var(--blue-200));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2E8CAA;
+  margin-top: 16px;
+  letter-spacing: 1px;
+  transition: all var(--transition-bounce);
+  text-align: center;
+  padding: 12px;
+}
+.result-display.rolling-result {
+  animation: flashResult 0.6s ease-out;
+}
+@keyframes flashResult {
+  0% { transform: scale(1.05); background: var(--blue-300); }
+  100% { transform: scale(1); }
+}
+
+/* ========== AI Chat Tab ========== */
+.chat-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  min-height: 300px;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--blue-200); border-radius: 2px; }
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  animation: fadeSlideIn 0.3s ease-out;
+  word-break: break-word;
+}
+.chat-bubble.assistant {
+  align-self: flex-start;
+  background: var(--white-85);
+  border-bottom-left-radius: 6px;
+  color: #3A5068;
+}
+.chat-bubble.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-500));
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.chat-input {
+  flex: 1;
+  border: 1.5px solid var(--blue-200);
+  border-radius: 24px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-family: var(--font-stack);
+  color: #3A5068;
+  background: var(--white-60);
+  transition: border-color var(--transition-fast);
+  min-height: 44px;
+}
+.chat-input:focus { outline: none; border-color: var(--blue-400); }
+.chat-input::placeholder { color: #B0CFD9; }
+.chat-send-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-500));
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-btn);
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+.chat-send-btn:active { transform: scale(0.9); }
+.typing-indicator {
+  align-self: flex-start;
+  padding: 12px 16px;
+  background: var(--white-85);
+  border-radius: 18px;
+  border-bottom-left-radius: 6px;
+  display: flex;
+  gap: 4px;
+  display: none;
+}
+.typing-indicator.show { display: flex; }
+.typing-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--blue-300);
+  animation: typingBounce 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ========== Footer ========== */
+.footer {
+  margin-top: auto;
+  padding: 24px 0 8px;
+  text-align: center;
+  font-size: 11px;
+  color: #A0C4D0;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+/* ========== Responsive: Desktop ========== */
+@media (min-width: 768px) {
+  .app-container {
+    padding: 40px 24px 40px;
+  }
+  .card {
+    padding: 36px 32px;
+  }
+  .number-display, .color-display {
+    width: 200px;
+    height: 200px;
+  }
+  .number-display .number { font-size: 80px; }
+  .tab-btn { padding: 12px 8px; font-size: 14px; }
+  .tab-btn .tab-emoji { font-size: 20px; }
+  .tab-btn .tab-label { font-size: 12px; }
+  .chat-container { height: 420px; }
+}
+
+@media (min-width: 1024px) {
+  .app-container { max-width: 520px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Decorations -->
+<div class="bg-decoration bg-circle bg-circle-1"></div>
+<div class="bg-decoration bg-circle bg-circle-2"></div>
+<div class="bg-decoration bg-circle bg-circle-3"></div>
+<div class="bg-decoration bg-circle bg-circle-4"></div>
+<div class="bg-decoration bg-dot bg-dot-1"></div>
+<div class="bg-decoration bg-dot bg-dot-2"></div>
+<div class="bg-decoration bg-dot bg-dot-3"></div>
+<div class="bg-decoration bg-dot bg-dot-4"></div>
+<div class="bg-decoration bg-dot bg-dot-5"></div>
+
+<!-- Main App -->
+<div class="app-container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-icon">🌿</div>
+    <h1>随便吧</h1>
+    <p class="slogan">把犹豫交给随机，把心情还给治愈</p>
+  </header>
+
+  <!-- Tab Navigation -->
+  <nav class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="number">
+      <span class="tab-emoji">🎲</span>
+      <span class="tab-label">随机数字</span>
+    </button>
+    <button class="tab-btn" data-tab="color">
+      <span class="tab-emoji">🎨</span>
+      <span class="tab-label">随机颜色</span>
+    </button>
+    <button class="tab-btn" data-tab="picker">
+      <span class="tab-emoji">🎯</span>
+      <span class="tab-label">自定义抽取</span>
+    </button>
+    <button class="tab-btn" data-tab="chat">
+      <span class="tab-emoji">🤖</span>
+      <span class="tab-label">AI 助手</span>
+    </button>
+  </nav>
+
+  <!-- Tab 1: Random Number -->
+  <section class="tab-content active" id="tab-number">
+    <div class="card">
+      <div class="number-display" id="numberDisplay">
+        <span class="number" id="randomNumber">42</span>
+      </div>
+      <button class="btn" id="rollBtn" onclick="rollNumber()">🎲 摇一个数字</button>
+      <div class="history">
+        <div class="history-title">📋 最近记录</div>
+        <div class="history-list" id="numberHistory"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tab 2: Random Color -->
+  <section class="tab-content" id="tab-color">
+    <div class="card">
+      <div class="color-display" id="colorDisplay" style="background-color: #7EC8E3;"></div>
+      <div class="color-info">
+        <div class="color-name-cn" id="colorNameCN">淡蓝</div>
+        <div class="color-name-en" id="colorNameEN">Light Blue</div>
+        <div class="color-hex" id="colorHex">#7EC8E3</div>
+      </div>
+      <div class="color-tags" id="colorTags">
+        <span class="color-tag">清新</span>
+        <span class="color-tag">日常</span>
+        <span class="color-tag">春夏</span>
+      </div>
+      <button class="btn" id="rollColorBtn" style="margin-top:20px;" onclick="rollColor()">🎨 换一个颜色</button>
+    </div>
+  </section>
+
+  <!-- Tab 3: Custom Picker -->
+  <section class="tab-content" id="tab-picker">
+    <div class="card">
+      <textarea class="option-input" id="optionInput" placeholder="在这里输入你的选项…&#10;每行一个，或者用逗号、空格分隔都可以&#10;&#10;例如：&#10;吃火锅&#10;吃日料&#10;吃烤肉&#10;吃沙拉&#10;不吃"></textarea>
+      <p class="input-hint">💡 支持换行 / 逗号 / 中文逗号 / 空格分隔</p>
+      <div class="preset-btns">
+        <button class="preset-btn" onclick="setPreset('breakfast')">🍳 早餐吃什么</button>
+        <button class="preset-btn" onclick="setPreset('drink')">🥤 喝什么</button>
+        <button class="preset-btn" onclick="setPreset('activity')">🎮 周末干嘛</button>
+        <button class="preset-btn" onclick="setPreset('movie')">🎬 看什么电影</button>
+      </div>
+      <button class="btn" onclick="rollCustom()">🎯 开始抽取</button>
+      <div class="result-display" id="customResult">👆 输入选项后点击抽取</div>
+    </div>
+  </section>
+
+  <!-- Tab 4: AI Chat -->
+  <section class="tab-content" id="tab-chat">
+    <div class="card">
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-bubble assistant">
+            👋 嗨～我是你的选择困难小助手！<br><br>
+            在纠结什么？把你的选项和顾虑都告诉我吧～<br>
+            比如：<br>
+            • 「在两个工作机会之间纠结…」<br>
+            • 「不知道该不该换城市…」<br>
+            • 「今天穿哪件衣服出门…」<br><br>
+            我会帮你分析，给你一些参考建议 💙
+          </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chatInput" type="text" placeholder="说说你在纠结什么吧…" maxlength="500" onkeydown="if(event.key==='Enter')sendMessage()">
+          <button class="chat-send-btn" onclick="sendMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    随便吧 · 治愈你的选择困难 💙
+  </footer>
+
+</div>
+
+<script>
+/* ================================================================
+   随便吧 — 选择困难症辅助网站
+   ================================================================ */
+
+// ==================== Color Library (60+ Modern Colors) ====================
+const colorLibrary = [
+  // Red tones
+  { cn: '正红', en: 'True Red', hex: '#D94040', rgb: '217,64,64', tags: ['经典', '热情', '聚会'] },
+  { cn: '酒红', en: 'Burgundy', hex: '#8E354A', rgb: '142,53,74', tags: ['秋冬', '成熟', '正式'] },
+  { cn: '珊瑚红', en: 'Coral', hex: '#FF7F6E', rgb: '255,127,110', tags: ['春夏', '活力', '约会'] },
+  { cn: '砖红', en: 'Brick Red', hex: '#C1665B', rgb: '193,102,91', tags: ['复古', '秋冬', '文艺'] },
+  { cn: '玫瑰红', en: 'Rose', hex: '#E88B9C', rgb: '232,139,156', tags: ['浪漫', '约会', '甜美'] },
+  { cn: '草莓红', en: 'Strawberry', hex: '#EF5B5B', rgb: '239,91,91', tags: ['活力', '夏日', '运动'] },
+  { cn: '豆沙红', en: 'Dusty Rose', hex: '#C48B8B', rgb: '196,139,139', tags: ['温柔', '日常', '通勤'] },
+  { cn: '番茄红', en: 'Tomato', hex: '#E2533E', rgb: '226,83,62', tags: ['活力', '户外', '运动'] },
+
+  // Orange tones
+  { cn: '橘橙', en: 'Tangerine', hex: '#F8955E', rgb: '248,149,94', tags: ['活力', '夏日', '休闲'] },
+  { cn: '杏橙', en: 'Apricot', hex: '#F4B183', rgb: '244,177,131', tags: ['温柔', '春夏', '日常'] },
+  { cn: '三文鱼粉', en: 'Salmon', hex: '#FA9A85', rgb: '250,154,133', tags: ['清新', '春夏', '约会'] },
+  { cn: '南瓜橘', en: 'Pumpkin', hex: '#E8823A', rgb: '232,130,58', tags: ['秋冬', '温暖', '节日'] },
+  { cn: '蜜糖橘', en: 'Honey Orange', hex: '#F7A460', rgb: '247,164,96', tags: ['温暖', '日常', '休闲'] },
+  { cn: '焦糖', en: 'Caramel', hex: '#C68B5E', rgb: '198,139,94', tags: ['秋冬', '成熟', '复古'] },
+
+  // Yellow tones
+  { cn: '柠檬黄', en: 'Lemon', hex: '#F7E358', rgb: '247,227,88', tags: ['活力', '夏日', '运动'] },
+  { cn: '鹅黄', en: 'Canary Yellow', hex: '#FCE883', rgb: '252,232,131', tags: ['春夏', '清新', '可爱'] },
+  { cn: '芥末黄', en: 'Mustard', hex: '#D4A843', rgb: '212,168,67', tags: ['秋冬', '复古', '文艺'] },
+  { cn: '奶油黄', en: 'Buttercream', hex: '#FDF0C1', rgb: '253,240,193', tags: ['温柔', '春夏', '约会'] },
+  { cn: '向日葵黄', en: 'Sunflower', hex: '#F7C948', rgb: '247,201,72', tags: ['活力', '夏日', '户外'] },
+  { cn: '香槟金', en: 'Champagne', hex: '#E8D5A3', rgb: '232,213,163', tags: ['优雅', '正式', '聚会'] },
+
+  // Green tones
+  { cn: '薄荷绿', en: 'Mint', hex: '#8FD0B2', rgb: '143,208,178', tags: ['清新', '春夏', '日常'] },
+  { cn: '橄榄绿', en: 'Olive', hex: '#8B9467', rgb: '139,148,103', tags: ['复古', '秋冬', '户外'] },
+  { cn: '翡翠绿', en: 'Emerald', hex: '#50B498', rgb: '80,180,152', tags: ['优雅', '正式', '聚会'] },
+  { cn: '鼠尾草绿', en: 'Sage', hex: '#B2C9AD', rgb: '178,201,173', tags: ['清新', '文艺', '日常'] },
+  { cn: '森林绿', en: 'Forest', hex: '#5B8A72', rgb: '91,138,114', tags: ['户外', '秋冬', '沉稳'] },
+  { cn: '牛油果绿', en: 'Avocado', hex: '#9AAF7B', rgb: '154,175,123', tags: ['清新', '日常', '休闲'] },
+  { cn: '湖水绿', en: 'Teal', hex: '#5BAAA0', rgb: '91,170,160', tags: ['清新', '夏日', '度假'] },
+  { cn: '嫩芽绿', en: 'Sprout', hex: '#C1D5A4', rgb: '193,213,164', tags: ['春夏', '清新', '可爱'] },
+
+  // Blue tones
+  { cn: '天蓝', en: 'Sky Blue', hex: '#8BCBEB', rgb: '139,203,235', tags: ['清新', '春夏', '日常'] },
+  { cn: '雾霾蓝', en: 'Mist Blue', hex: '#9AB5C8', rgb: '154,181,200', tags: ['温柔', '秋冬', '通勤'] },
+  { cn: '靛蓝', en: 'Indigo', hex: '#4A6FA5', rgb: '74,111,165', tags: ['沉稳', '正式', '秋冬'] },
+  { cn: '蒂芙尼蓝', en: 'Tiffany Blue', hex: '#81D8D0', rgb: '129,216,208', tags: ['优雅', '约会', '聚会'] },
+  { cn: '灰蓝', en: 'Slate Blue', hex: '#7C94A8', rgb: '124,148,168', tags: ['沉稳', '日常', '通勤'] },
+  { cn: '淡蓝', en: 'Light Blue', hex: '#7EC8E3', rgb: '126,200,227', tags: ['清新', '日常', '春夏'] },
+  { cn: '海蓝', en: 'Ocean Blue', hex: '#3E8EB3', rgb: '62,142,179', tags: ['沉稳', '度假', '运动'] },
+  { cn: '婴儿蓝', en: 'Baby Blue', hex: '#AED6F1', rgb: '174,214,241', tags: ['温柔', '可爱', '春夏'] },
+  { cn: '牛仔蓝', en: 'Denim', hex: '#5B7FA5', rgb: '91,127,165', tags: ['休闲', '日常', '复古'] },
+  { cn: '钴蓝', en: 'Cobalt', hex: '#3D6FB0', rgb: '61,111,176', tags: ['活力', '正式', '运动'] },
+
+  // Purple tones
+  { cn: '薰衣草紫', en: 'Lavender', hex: '#B8A9D4', rgb: '184,169,212', tags: ['温柔', '浪漫', '约会'] },
+  { cn: '紫罗兰', en: 'Violet', hex: '#9B7FC0', rgb: '155,127,192', tags: ['浪漫', '文艺', '聚会'] },
+  { cn: '丁香紫', en: 'Lilac', hex: '#C8B8D8', rgb: '200,184,216', tags: ['清新', '春夏', '甜美'] },
+  { cn: '葡萄紫', en: 'Grape', hex: '#7D5BA6', rgb: '125,91,166', tags: ['成熟', '秋冬', '正式'] },
+  { cn: '浅紫', en: 'Mauve', hex: '#D4C5D9', rgb: '212,197,217', tags: ['温柔', '日常', '通勤'] },
+  { cn: '暮光紫', en: 'Twilight', hex: '#6B5E8A', rgb: '107,94,138', tags: ['沉稳', '文艺', '秋冬'] },
+
+  // Pink tones
+  { cn: '樱花粉', en: 'Sakura', hex: '#F4C6CB', rgb: '244,198,203', tags: ['甜美', '春夏', '约会'] },
+  { cn: '玫瑰粉', en: 'Rose Pink', hex: '#EEA5B6', rgb: '238,165,182', tags: ['浪漫', '约会', '聚会'] },
+  { cn: '桃红', en: 'Peach', hex: '#F7B8A0', rgb: '247,184,160', tags: ['活力', '夏日', '运动'] },
+  { cn: '脏粉', en: 'Dusty Pink', hex: '#D4A9AD', rgb: '212,169,173', tags: ['温柔', '日常', '通勤'] },
+  { cn: '玫红', en: 'Magenta', hex: '#D4628E', rgb: '212,98,142', tags: ['活力', '聚会', '个性'] },
+  { cn: '裸粉', en: 'Nude Pink', hex: '#E8D5D0', rgb: '232,213,208', tags: ['温柔', '日常', '优雅'] },
+
+  // Neutral tones
+  { cn: '米白', en: 'Off White', hex: '#F5F0EB', rgb: '245,240,235', tags: ['百搭', '日常', '通勤'] },
+  { cn: '奶油', en: 'Cream', hex: '#FDF3E1', rgb: '253,243,225', tags: ['温柔', '日常', '约会'] },
+  { cn: '卡其', en: 'Khaki', hex: '#C4B59B', rgb: '196,181,155', tags: ['休闲', '日常', '复古'] },
+  { cn: '灰褐', en: 'Taupe', hex: '#A89583', rgb: '168,149,131', tags: ['沉稳', '秋冬', '通勤'] },
+  { cn: '烟灰', en: 'Smoke Gray', hex: '#B8BCC4', rgb: '184,188,196', tags: ['百搭', '日常', '通勤'] },
+  { cn: '奶茶色', en: 'Milk Tea', hex: '#D2BBA0', rgb: '210,187,160', tags: ['温柔', '日常', '约会'] },
+  { cn: '象牙白', en: 'Ivory', hex: '#FFFEF5', rgb: '255,254,245', tags: ['优雅', '正式', '聚会'] },
+  { cn: '燕麦色', en: 'Oatmeal', hex: '#E8DDD0', rgb: '232,221,208', tags: ['温柔', '秋冬', '日常'] },
+  { cn: '浅灰', en: 'Light Gray', hex: '#D9DEE0', rgb: '217,222,224', tags: ['百搭', '日常', '简约'] },
+  { cn: '炭灰', en: 'Charcoal', hex: '#6E7A82', rgb: '110,122,130', tags: ['沉稳', '正式', '通勤'] }
+];
+
+// ==================== Preset Templates ====================
+const presets = {
+  breakfast: '包子\n油条\n煎饼果子\n面包牛奶\n麦片酸奶\n不吃早餐',
+  drink: '奶茶\n咖啡\n柠檬水\n可乐\n白开水\n果汁\n酸奶',
+  activity: '看电影\n逛街\n在家躺平\n去公园\n约朋友吃饭\n打游戏\n看书',
+  movie: '喜剧片\n恐怖片\n爱情片\n科幻片\n动画片\n纪录片\n随便看'
+};
+
+// ==================== State ====================
+let numberHistory = [];
+let currentColor = colorLibrary[24]; // Default: 淡蓝
+
+// ==================== Tab Switching ====================
+document.addEventListener('DOMContentLoaded', function() {
+  // Init tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tabName = this.dataset.tab;
+      switchTab(tabName);
+    });
+  });
+
+  // Init default display
+  updateColorDisplay(currentColor);
+});
+
+function switchTab(tabName) {
+  // Update buttons
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+
+  // Update content
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+// ==================== Tab 1: Random Number ====================
+function rollNumber() {
+  const display = document.getElementById('numberDisplay');
+  const numEl = document.getElementById('randomNumber');
+  const rollBtn = document.getElementById('rollBtn');
+
+  // Disable button briefly
+  rollBtn.disabled = true;
+  rollBtn.style.opacity = '0.6';
+
+  // Shake animation
+  display.classList.add('rolling');
+  setTimeout(() => display.classList.remove('rolling'), 450);
+
+  // Rolling animation
+  const totalFrames = 20;
+  let frame = 0;
+  const rollInterval = setInterval(() => {
+    numEl.textContent = Math.floor(Math.random() * 100) + 1;
+    frame++;
+    if (frame >= totalFrames) {
+      clearInterval(rollInterval);
+      // Final number
+      const finalNumber = Math.floor(Math.random() * 100) + 1;
+      numEl.textContent = finalNumber;
+
+      // Add to history
+      numberHistory.unshift(finalNumber);
+      if (numberHistory.length > 10) numberHistory.pop();
+      renderHistory();
+
+      // Re-enable button
+      rollBtn.disabled = false;
+      rollBtn.style.opacity = '1';
+    }
+  }, 50);
+}
+
+function renderHistory() {
+  const container = document.getElementById('numberHistory');
+  container.innerHTML = numberHistory.map(n =>
+    `<span class="history-item">${n}</span>`
+  ).join('');
+}
+
+// ==================== Tab 2: Random Color ====================
+function rollColor() {
+  const display = document.getElementById('colorDisplay');
+  const btn = document.getElementById('rollColorBtn');
+
+  // Disable button during animation
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+
+  // Pick final color (ensure different from current)
+  let randomIndex;
+  let finalColor;
+  do {
+    randomIndex = Math.floor(Math.random() * colorLibrary.length);
+    finalColor = colorLibrary[randomIndex];
+  } while (finalColor.hex === currentColor.hex && colorLibrary.length > 1);
+
+  currentColor = finalColor;
+
+  // Rolling animation: rapidly cycle through colors
+  const totalFrames = 22;
+  let frame = 0;
+  display.classList.add('color-rolling');
+
+  const rollInterval = setInterval(() => {
+    // Pick a random intermediate color
+    const tempColor = colorLibrary[Math.floor(Math.random() * colorLibrary.length)];
+    display.style.backgroundColor = tempColor.hex;
+    document.getElementById('colorNameCN').textContent = tempColor.cn;
+    document.getElementById('colorNameEN').textContent = tempColor.en;
+    document.getElementById('colorHex').textContent = tempColor.hex;
+    document.getElementById('colorTags').innerHTML = tempColor.tags.map(t =>
+      `<span class="color-tag">${t}</span>`
+    ).join('');
+
+    frame++;
+    if (frame >= totalFrames) {
+      clearInterval(rollInterval);
+
+      // Settle on final color
+      updateColorDisplay(finalColor);
+      display.classList.remove('color-rolling');
+
+      // Pulse on finish
+      display.style.transform = 'scale(1.06)';
+      setTimeout(() => { display.style.transform = 'scale(1)'; }, 250);
+
+      // Re-enable button
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  }, 55);
+}
+
+function updateColorDisplay(color) {
+  const display = document.getElementById('colorDisplay');
+  display.style.backgroundColor = color.hex;
+
+  document.getElementById('colorNameCN').textContent = color.cn;
+  document.getElementById('colorNameEN').textContent = color.en;
+  document.getElementById('colorHex').textContent = color.hex;
+
+  const tagsContainer = document.getElementById('colorTags');
+  tagsContainer.innerHTML = color.tags.map(t => `<span class="color-tag">${t}</span>`).join('');
+}
+
+// ==================== Tab 3: Custom Picker ====================
+function setPreset(type) {
+  const input = document.getElementById('optionInput');
+  input.value = presets[type];
+  input.focus();
+}
+
+function parseOptions(raw) {
+  // Split by newline, Chinese comma, English comma, or Chinese/English semicolon
+  // Also split by multiple spaces
+  let parts = raw.split(/[\n,，;；]+/);
+  // Further split each part by 2+ spaces
+  parts = parts.flatMap(p => p.split(/\s{2,}/));
+  // Trim and filter empty
+  return parts.map(p => p.trim()).filter(p => p.length > 0);
+}
+
+function rollCustom() {
+  const input = document.getElementById('optionInput');
+  const resultEl = document.getElementById('customResult');
+  const raw = input.value.trim();
+
+  if (!raw) {
+    resultEl.textContent = '😅 请先输入选项再抽取哦～';
+    resultEl.classList.add('rolling-result');
+    setTimeout(() => resultEl.classList.remove('rolling-result'), 600);
+    return;
+  }
+
+  const options = parseOptions(raw);
+
+  if (options.length === 0) {
+    resultEl.textContent = '😅 没有识别到有效选项，请检查一下～';
+    resultEl.classList.add('rolling-result');
+    setTimeout(() => resultEl.classList.remove('rolling-result'), 600);
+    return;
+  }
+
+  if (options.length === 1) {
+    resultEl.textContent = `🤷 只有一个选项：「${options[0]}」，不用纠结啦！`;
+    resultEl.classList.add('rolling-result');
+    setTimeout(() => resultEl.classList.remove('rolling-result'), 600);
+    return;
+  }
+
+  // Rolling animation through options
+  const totalFrames = 25;
+  let frame = 0;
+  const rollInterval = setInterval(() => {
+    const idx = Math.floor(Math.random() * options.length);
+    resultEl.textContent = options[idx];
+    frame++;
+    if (frame >= totalFrames) {
+      clearInterval(rollInterval);
+      const final = options[Math.floor(Math.random() * options.length)];
+      resultEl.textContent = '✨ ' + final + ' ✨';
+      resultEl.classList.add('rolling-result');
+      setTimeout(() => resultEl.classList.remove('rolling-result'), 600);
+    }
+  }, 40);
+}
+
+// ==================== Tab 4: AI Chat (Placeholder) ====================
+const PLACEHOLDER_RESPONSES = [
+  '好的，我理解你的纠结了～ 🤔\n\n其实面对选择时感到犹豫是很正常的。让我帮你梳理一下：看你的描述，你内心似乎更倾向于安全感多一些。\n\n如果非要二选一的话，我会建议你选那个让你「即使失败了也不会太后悔」的选项。\n\n这只是参考建议哦，最终决定权在你手里 💙',
+  '听你这么一说，我觉得这件事可以从另一个角度来看～ 🌟\n\n纠结的本质往往是「怕选错」，但实际上大多数选择没有绝对的对错。\n\n不妨试试问自己：如果只有一个选择，我会感到遗憾吗？\n\n希望对你有帮助，相信你的直觉！',
+  '我感受到了你的为难～ 😊\n\n要不试试「抛硬币法」？不是说真的靠硬币决定，而是在硬币飞起的瞬间，你心里会希望它落在哪一面——那就是你真实的想法。\n\n不管怎样，做决定本身就是一种勇气！'
+];
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const messages = document.getElementById('chatMessages');
+  const typingIndicator = document.getElementById('typingIndicator');
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  // Add user message
+  const userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble user';
+  userBubble.textContent = text;
+  messages.appendChild(userBubble);
+  input.value = '';
+
+  // Scroll to bottom
+  messages.scrollTop = messages.scrollHeight;
+
+  // Show typing indicator
+  typingIndicator.classList.add('show');
+  messages.scrollTop = messages.scrollHeight;
+
+  // Simulate AI response after delay
+  setTimeout(() => {
+    typingIndicator.classList.remove('show');
+
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'chat-bubble assistant';
+
+    // TODO: Replace this with actual AI API call
+    // ============================================
+    // When ready to connect an AI API, replace the
+    // placeholder response below with a fetch()
+    // call to your AI service. Example:
+    //
+    // const response = await fetch('YOUR_API_URL', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json',
+    //              'Authorization': 'Bearer YOUR_API_KEY' },
+    //   body: JSON.stringify({
+    //     model: 'claude-sonnet-4-6',
+    //     messages: [{ role: 'user', content: text }]
+    //   })
+    // });
+    // const data = await response.json();
+    // aiBubble.textContent = data.content[0].text;
+    // ============================================
+
+    const randomResponse = PLACEHOLDER_RESPONSES[Math.floor(Math.random() * PLACEHOLDER_RESPONSES.length)];
+    aiBubble.textContent = randomResponse;
+    messages.appendChild(aiBubble);
+    messages.scrollTop = messages.scrollHeight;
+  }, 1500 + Math.random() * 1000);
+}
+</script>
+
+</body>
+</html>
